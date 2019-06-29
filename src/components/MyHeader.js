@@ -26,8 +26,8 @@ class MyHeader extends Component {
                     />
                     </TouchableOpacity>
                 </Left>
-                <Body style={{flex: 2, alignSelf:'center'}}>
-                    <Text>{this.props.page}</Text>
+                <Body style={{flex: 2, alignSelf:'center', alignContent:'center', alignItems:'center'}}>
+                    <Text style={{fontWeight:'bold', fontSize:20}}>{this.props.page}</Text>
                 </Body>
                 <Right style={{flex:1}}>
                 <TouchableOpacity transparet

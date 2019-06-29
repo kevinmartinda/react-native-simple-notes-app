@@ -44,17 +44,16 @@ class NotesFormScreen extends Component {
             <View>
                 <Form>
                     <TextInput  maxLength={64} style={{
-                        fontSize: 30,
+                        fontSize: 14,
+                        padding: 20,
                         margin: 30,
-                    }} placeholder="Add Title"
-                    value={this.state.categories[2].name} />
+                    }} placeholder="Add Title" />
                     <TextInput style={{
-                        fontSize: 30,
+                        fontSize: 14,
                         padding: 20,
                         margin: 30,
                         height: 170
-                    }} placeholder="Add Description"
-                    value={this.state.categories[1].name} />
+                    }} placeholder="Add Description" />
                     <Picker
                         selectedValue={this.state.category}
                         style={{height: 50, padding: 40, margin: 30, elevation:5}}

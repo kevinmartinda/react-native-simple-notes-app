@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, TextInput } from 'react-native';
 import { Icon, Form, Picker } from 'native-base';
-import { View, Text } from 'native-base';
+import { View } from 'native-base';
 
 class NotesEditScreen extends Component {
     constructor(props) {
@@ -20,7 +20,6 @@ class NotesEditScreen extends Component {
         this.setState({
             categories: this.props.navigation.state.params.category
         })
-        console.warn(this.props.navigation.state.params.category)
     }
 
     static navigationOptions = ({navigation}) => ({
@@ -41,7 +40,6 @@ class NotesEditScreen extends Component {
          this.setState({
            title: value
          })
-         console.warn(this.state.note)
        }
 
     noteChange = (value) => {
@@ -55,14 +53,15 @@ class NotesEditScreen extends Component {
             <View>
                 <Form>
                     <TextInput  maxLength={64} style={{
-                        fontSize: 30,
+                        fontSize: 14,
+                        padding: 20,
                         margin: 30,
                     }} placeholder="Add Title"
                     value={this.state.title}
                     onChangeText={this.titleChange} />
                     
                     <TextInput style={{
-                        fontSize: 30,
+                        fontSize: 14,
                         padding: 20,
                         margin: 30,
                         height: 170
@@ -81,7 +80,7 @@ class NotesEditScreen extends Component {
                     }>
                     {
                         this.state.categories.map( item => (
-                            <Picker.Item key={item.id} label={item.name} value={item.id} />
+                            <Picker.Item key={item.id} label={item.name} value={item.name} />
                             )
                         )
                     }
