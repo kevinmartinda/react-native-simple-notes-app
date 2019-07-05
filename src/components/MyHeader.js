@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, Image, Modal } from 'react-native';
 import { Text, Thumbnail, Header, Left, Right, Body, View, ListItem, List } from 'native-base';
+import { connect } from 'react-redux';
+import { getSort } from '../public/redux/action/notes'
 
 class MyHeader extends Component {
     constructor() {
@@ -12,6 +14,10 @@ class MyHeader extends Component {
 
     setVisible(visibel){
         this.setState({modalVisible: visibel})
+    }
+
+    getSort = (type) => {
+        this.props.dispatch(getSort(type))
     }
 
     render() {
@@ -63,6 +69,7 @@ class MyHeader extends Component {
                     <ListItem>
                     <TouchableOpacity
                         onPress={() => {
+                            this.props.dispatch(getSort('asc'))
                             this.setVisible(!this.state.modalVisible);
                         }}>
                         <Text>Ascending</Text>
@@ -72,6 +79,7 @@ class MyHeader extends Component {
                     <ListItem>
                     <TouchableOpacity
                         onPress={() => {
+                            this.props.dispatch(getSort('desc'))
                             this.setVisible(!this.state.modalVisible);
                         }}>
                         <Text>Descending</Text>
@@ -88,4 +96,4 @@ class MyHeader extends Component {
     }
 }
 
-export default MyHeader;
+export default connect(state => ({notes: state.notes}))(MyHeader);

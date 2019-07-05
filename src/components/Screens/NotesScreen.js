@@ -1,41 +1,75 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
-import { Fab, Container, View, Icon, Input, List } from 'native-base'
-import { ScrollView } from 'react-native-gesture-handler';
+import { FlatList, ActivityIndicator, RefreshControl } from 'react-native';
+import { Fab, Container, View, Icon, Input } from 'native-base'
 import CardList from '../CardList';
 import MyHeader from '../MyHeader';
 import axios from 'axios';
+import _ from 'lodash'
+
+import { connect } from 'react-redux'
+
+import { getNotes, getSearchedNotes, incPage, getMoreData, getSort } from '../../public/redux/action/notes'
+import { getCategories } from '../../public/redux/action/categories'
 
 class NotesScreen extends Component {
     constructor(){
         super()
         this.state = {
             modalVisible: false,
-            data: [],
-            categories: []
+            seacrh: '',
+            page: 1,
+            onEndReachedCalledDuringMomentum: false
         }
     }
 
     componentDidMount() {
-        axios.get('http://192.168.43.10:3001/notes')
-            .then(result => (
-                this.setState({
-                    data: result.data.values
-                })
-            ))
-            .catch(err => {
-                console.warn('cannot load data..')
-            })
-        
-        axios.get('http://192.168.43.10:3001/categories')
-            .then(result => (
-                this.setState({
-                    categories: result.data.values
-                })
-            ))
-            .catch(err => {
-                console.warn('cannot load data..')
-            })
+        this.fetchCategories()
+        this.fetchNotes()
+    }
+
+    _onRefresh = async () => {
+        await this.setState({page: 1})
+        await this.setState({refreshing: true})
+        await this.fetchNotes()
+        await this.setState({refreshing: false})
+      }
+
+    fetchSearchedNote = async (keyword) => {
+        try {
+            await this.setState({search: keyword})
+            await this.props.dispatch(getSearchedNotes(this.state.search))   
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    fetchNotes = async () => {
+        try {
+            await this.props.dispatch(getNotes())   
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    fetchCategories = () => {
+        this.props.dispatch(getCategories())
+    }
+
+    getCategories = () => {
+        axios.get(`http://192.168.100.81:3001/categories`)
+          .then(result => this.setState({categories: result.data.values}))
+          .catch(err => alert('cannot load data..'))
+    }
+
+    handleLoadMore = async () => {
+        if(this.state.page < this.props.notes.page) {
+            await this.setState({isLoading: true})
+            await this.setState({page: this.state.page + 1}, 
+                () => this.props.dispatch(getMoreData(this.state.page)))
+        } else {
+            await this.setState({isLoading: false})
+            console.log('end of data')
+        }
     }
 
     render() {
@@ -43,7 +77,7 @@ class NotesScreen extends Component {
             <Container>
                 <MyHeader navigation={this.props.navigation} page="Notes App" />
             <View style={{height: 70}}>
-            <Input placeholder="cari note.." style={{
+            <Input placeholder="Search note.." style={{
                     borderRadius: 50,
                     borderWidth: 0.3,
                     alignContent: 'center',
@@ -54,23 +88,29 @@ class NotesScreen extends Component {
                     elevation: 1,
                     shadowOpacity: 0.2,
                     shadowRadius: 0.2
-                }} />
+                }}
+                onChangeText={_.debounce(this.fetchSearchedNote, 1000)} />
             </View>
-            <ScrollView>
-                
 
                 <View style={{ flex: 1, flexDirection: 'row', flexWrap: "wrap", justifyContent: "center"}}>
-                        <FlatList
-                            data={this.state.data}
-                            renderItem={({ item }) => <CardList category={this.state.categories} notes={item} navigation={this.props.navigation} />}
-                            keyExtractor={(item, index) => index}
+                        {this.props.notes.isLoading || this.props.categories.isLoading || this.props.categories.isDeleted ? <ActivityIndicator size="large" color="#0000ff" /> : (<FlatList
+                            data={this.props.notes.data}
+                            renderItem={({ item }) => <CardList category={this.props.categories.data} note={item} navigation={this.props.navigation} />}
+                            keyExtractor={(item, index) => index.toString()}
                             numColumns={2}
-                        />
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this._onRefresh}
+                                />}
+                            onEndReached={this.handleLoadMore}
+                            onEndReachedThreshold="0.1"
+                            ListFooterComponent={() => this.state.isLoading ? (<ActivityIndicator size="small" color="#0000ff" />) : null}
+                        />)}
                 </View>
-                </ScrollView>
                 <Fab style={{ backgroundColor: "white" }}
                     position="bottomRight"
-                    onPress={() => this.props.navigation.navigate('AddNotes', this.state.categories)}>
+                    onPress={() => this.props.navigation.navigate('AddNotes', {categories:this.state.categories})}>
                     <Icon name="add" style={{color: 'blue'}} />
                 </Fab>
             </Container>
@@ -78,4 +118,11 @@ class NotesScreen extends Component {
     }
 }
 
-export default NotesScreen;
+const mapStateToProps = state => {
+    return {
+        categories: state.categories,
+        notes: state.notes
+    }
+}
+
+export default connect(mapStateToProps)(NotesScreen)

@@ -1,25 +1,22 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, TextInput } from 'react-native';
-import { Icon, Form, Picker } from 'native-base';
-import { View } from 'native-base';
+import { Icon, Form, Picker, Header, Body, Left, Right, Text, View } from 'native-base';
+
+import { updateNotes } from '../../public/redux/action/notes'
+
+import { connect } from 'react-redux';
 
 class NotesEditScreen extends Component {
     constructor(props) {
         super(props)
-        const {title, note, Category} = this.props.navigation.state.params.data
+        const {title, note, Category, id} = this.props.navigation.state.params.data
         this.state = {
-            categories: [],
-            category: Category.name,
+            category: Category ? Category.id : 1,
             title,
-            note
+            note,
+            id
 
         }
-    }
-
-    componentDidMount() {
-        this.setState({
-            categories: this.props.navigation.state.params.category
-        })
     }
 
     static navigationOptions = ({navigation}) => ({
@@ -47,10 +44,37 @@ class NotesEditScreen extends Component {
            note: value
          })
        }
+    
+    patchNote = async (data, id) => {
+        try {
+            await this.props.dispatch(updateNotes(data, id))
+        } catch(err) {
+            console.log(err)
+        }
+    }
 
     render() {
         return(
             <View>
+            <Header style={{backgroundColor:'white'}}>
+                <Left style={{flex:1}}>
+                    <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                    <Icon name="arrow-back" />
+                    </TouchableOpacity>
+                </Left>
+                <Body style={{flex: 2, alignSelf:'center', alignContent:'center', alignItems:'center'}}>
+                    <Text style={{fontWeight:'bold', fontSize:20}}>Edit Note</Text>
+                </Body>
+                <Right style={{flex:1}}>
+                <TouchableOpacity transparet
+                onPress={() => {
+                    this.patchNote({title: this.state.title, note: this.state.note, categoryId: this.state.category}, this.state.id)
+                    this.props.navigation.navigate('Home')
+                    }}>
+                <Icon name="md-checkmark-circle-outline" />
+                </TouchableOpacity>
+                </Right>
+            </Header>
                 <Form>
                     <TextInput  maxLength={64} style={{
                         fontSize: 14,
@@ -79,8 +103,8 @@ class NotesEditScreen extends Component {
                         this.setState({category: itemValue})
                     }>
                     {
-                        this.state.categories.map( item => (
-                            <Picker.Item key={item.id} label={item.name} value={item.name} />
+                        this.props.categories.data.map( item => (
+                            <Picker.Item key={item.id} label={item.name} value={item.id} />
                             )
                         )
                     }
@@ -91,4 +115,4 @@ class NotesEditScreen extends Component {
     }
 }
 
-export default NotesEditScreen;
+export default connect(state => ({categories: state.categories}))(NotesEditScreen);
