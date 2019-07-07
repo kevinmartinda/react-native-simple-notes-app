@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardItem, Body, Text, View } from 'native-base';
 import { StyleSheet, Alert } from 'react-native';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
+import moment from 'moment';
 
 import { deleteNotes } from '../public/redux/action/notes'
 import { connect } from 'react-redux';
@@ -32,7 +33,7 @@ class CardList extends Component {
               }}
               onPress={() => this.props.navigation.navigate('EditNotes', {data: this.props.note, category: this.props.category})}>
               <Text style={{color: 'white', textAlign:'left', fontSize:10}}>{this.props.note.Category !== null ? this.props.note.Category.name : '-'}</Text>
-              <Text style={{color: 'white', textAlign:'right', fontSize:8, margin:3}}>{this.props.note.updatedAt}</Text>
+              <Text style={{color: 'white', textAlign:'right', fontSize:8, margin:3}}>{moment(this.props.note.updatedAt).format("DD MMM")}</Text>
               <Text style={{justifyContent:'center', alignItems:'center', fontSize:16, textAlign:'center', color:'white'}}>{this.props.note.title}</Text>
               <View>
                   <Text numberOfLines={5} style={{color:'white', fontSize:12, margin:5}}>

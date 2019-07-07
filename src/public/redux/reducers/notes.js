@@ -6,12 +6,19 @@ const initialState = {
     isLoading: true,
     isError: false,
     page: 1,
+    search: '',
     pageName: 'Home'
 }
 
 // create a reducer for getting network from RESTful API
 export default notes = (state = initialState, action) => {
     switch(action.type){
+        // SET SEARCH PARAM
+        case 'SET_SEARCH': 
+            return {
+                ...state,
+                search: action.payload
+            }
         //GET Notes
         case 'GET_NOTES_PENDING':
             return {
@@ -89,7 +96,8 @@ export default notes = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 isError: false,
-                data: action.payload.data.values
+                data: action.payload.data.values,
+                page: action.payload.data.totalPage
             }
         //GET Notes by Category
         case 'GET_NOTES_CATEGORY_PENDING':

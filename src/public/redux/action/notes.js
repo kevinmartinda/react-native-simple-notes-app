@@ -10,10 +10,18 @@ export const getNotes = () => {
     }
 }
 
-export const getSort = (sort) => {
-    return {
-        type: 'GET_SORT_NOTES',
-        payload: axios.get(`${url}notes?sort=${sort}`)
+export const getSort = (sort, search) => {
+    console.log(search)
+    if(search === ''){
+        return {
+            type: 'GET_SORT_NOTES',
+            payload: axios.get(`${url}notes?sort=${sort}`)
+        }
+    } else {
+        return {
+            type: 'GET_SORT_NOTES',
+            payload: axios.get(`${url}notes?sort=${sort}&search=${search}`)
+        }
     }
 }
 
@@ -59,12 +67,14 @@ export const updateNotes = (data, id) => {
     }
 }
 
-export const incPage = () => {
+export const setSearch = (data) => {
+    console.log("data: " + data)
     return {
-        type: 'INC_PAGE',
-        payload: 1
+        type: 'SET_SEARCH',
+        payload: data
     }
 }
+
 
 
 // export const updateNote = (id) => {

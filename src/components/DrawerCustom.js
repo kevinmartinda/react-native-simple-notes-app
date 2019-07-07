@@ -76,7 +76,7 @@ class DrawerCustom extends Component {
                         }} >
                         <ListItem noBorder >
                             <Left>
-                            <Image source={require('../../assets/work.png')} style={{width:20, height:20, marginRight:20}} />
+                            <Image source={{uri:item.url}} style={{width:20, height:20, marginRight:20}} />
                                 <Text style={{fontSize: 18}}>{item.name}</Text>
                             </Left>
                         </ListItem>

@@ -16,8 +16,8 @@ class MyHeader extends Component {
         this.setState({modalVisible: visibel})
     }
 
-    getSort = (type) => {
-        this.props.dispatch(getSort(type))
+    getSort = (type, search) => {
+        this.props.dispatch(getSort(type, search))
     }
 
     render() {
@@ -69,7 +69,7 @@ class MyHeader extends Component {
                     <ListItem>
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.dispatch(getSort('asc'))
+                            this.props.notes.search === '' ? this.props.dispatch(getSort('asc')) : this.props.dispatch(getSort('asc', this.props.notes.search))
                             this.setVisible(!this.state.modalVisible);
                         }}>
                         <Text>Ascending</Text>
@@ -79,7 +79,7 @@ class MyHeader extends Component {
                     <ListItem>
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.dispatch(getSort('desc'))
+                            this.props.notes.search === '' ? this.props.dispatch(getSort('desc')) : this.props.dispatch(getSort('desc', this.props.notes.search))
                             this.setVisible(!this.state.modalVisible);
                         }}>
                         <Text>Descending</Text>

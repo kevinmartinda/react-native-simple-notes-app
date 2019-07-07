@@ -8,7 +8,7 @@ import _ from 'lodash'
 
 import { connect } from 'react-redux'
 
-import { getNotes, getSearchedNotes, incPage, getMoreData, getSort } from '../../public/redux/action/notes'
+import { getNotes, getSearchedNotes, incPage, getMoreData, getSort, setSearch } from '../../public/redux/action/notes'
 import { getCategories } from '../../public/redux/action/categories'
 
 class NotesScreen extends Component {
@@ -36,8 +36,9 @@ class NotesScreen extends Component {
 
     fetchSearchedNote = async (keyword) => {
         try {
-            await this.setState({search: keyword})
-            await this.props.dispatch(getSearchedNotes(this.state.search))   
+            await this.props.dispatch(setSearch(keyword))
+            console.log(keyword)
+            await this.props.dispatch(getSearchedNotes(this.props.notes.search))   
         } catch (error) {
             console.log(error)
         }
@@ -55,14 +56,8 @@ class NotesScreen extends Component {
         this.props.dispatch(getCategories())
     }
 
-    getCategories = () => {
-        axios.get(`http://192.168.100.81:3001/categories`)
-          .then(result => this.setState({categories: result.data.values}))
-          .catch(err => alert('cannot load data..'))
-    }
-
     handleLoadMore = async () => {
-        if(this.state.page < this.props.notes.page) {
+        if(this.state.page < this.props.notes.page && this.props.notes.pageName === 'Home') {
             await this.setState({isLoading: true})
             await this.setState({page: this.state.page + 1}, 
                 () => this.props.dispatch(getMoreData(this.state.page)))
