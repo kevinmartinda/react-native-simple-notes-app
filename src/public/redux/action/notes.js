@@ -11,17 +11,9 @@ export const getNotes = () => {
 }
 
 export const getSort = (sort, search) => {
-    console.log(search)
-    if(search === ''){
-        return {
-            type: 'GET_SORT_NOTES',
-            payload: axios.get(`${url}notes?sort=${sort}`)
-        }
-    } else {
-        return {
-            type: 'GET_SORT_NOTES',
-            payload: axios.get(`${url}notes?sort=${sort}&search=${search}`)
-        }
+    return {
+        type: 'GET_SORT_NOTES',
+        payload: axios.get(`${url}notes?sort=${sort}&search=${search}`)
     }
 }
 

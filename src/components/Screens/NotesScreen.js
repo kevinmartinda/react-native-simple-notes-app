@@ -37,7 +37,7 @@ class NotesScreen extends Component {
     fetchSearchedNote = async (keyword) => {
         try {
             await this.props.dispatch(setSearch(keyword))
-            console.log(keyword)
+            await console.log("keyword :"+keyword)
             await this.props.dispatch(getSearchedNotes(this.props.notes.search))   
         } catch (error) {
             console.log(error)

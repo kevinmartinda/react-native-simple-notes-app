@@ -7,6 +7,7 @@ const initialState = {
     isError: false,
     page: 1,
     search: '',
+    isSearching: false,
     pageName: 'Home'
 }
 
@@ -17,6 +18,7 @@ export default notes = (state = initialState, action) => {
         case 'SET_SEARCH': 
             return {
                 ...state,
+                isSearching: true,
                 search: action.payload
             }
         //GET Notes
