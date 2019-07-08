@@ -9,9 +9,10 @@ This is a simple notes app built on top of React Native, a very popular javascri
     <img src="https://user-images.githubusercontent.com/43369306/60769196-fe475f00-a0f6-11e9-9892-35fe45361c61.jpg" width=200 align="center"/>
     <img src="https://user-images.githubusercontent.com/43369306/60769190-e7a10800-a0f6-11e9-9033-c8ac4b5b71c6.jpg" width=200 align="center"/>
 </p>
+
   
-**How to run**  
-You can download the .apk file in this repository and simply install it, but you must set your IP address into 192.168.43.10 or, you can either clone this repository or download the reposity and rebuild it with a litlle setting.  
+## How to run  
+You can [download the .apk file](https://github.com/kevinmartinda/react-native-simple-notes-app/raw/master/NoteApp.apk) in this repository and simply install it, but you must set your local machine's IP address into 192.168.43.10 or, you can either clone this repository or download the reposity and rebuild it with a litlle setting.  
   
 make sure you have react-native cli installed globaly in your machine, to install it just simply run the following command:
   
@@ -34,5 +35,7 @@ react-native run android
   
 You must run the backend server on your own, just click [this link](https://github.com/kevinmartinda/express-notes-api) and follw the instruction on the readme to install it on your local machine. and make sure your phone and local machine are connected on the same network.  
   
-**Requirements**  
+you can watch demo of this app [here](https://youtu.be/MXNVIOvPlzg)
+  
+## Requirements  
 -[Node.js](https://nodejs.org/en/) V8+
